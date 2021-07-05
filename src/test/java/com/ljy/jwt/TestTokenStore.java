@@ -3,13 +3,10 @@ package com.ljy.jwt;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.stereotype.Repository;
-
 import com.ljy.jwt.security.JwtToken;
-import com.ljy.jwt.security.TokenStore;
+import com.ljy.jwt.security.JwtTokenStore;
 
-@Repository
-public class TestTokenStore implements TokenStore {
+public class TestTokenStore implements JwtTokenStore {
 	private final ConcurrentHashMap<String, JwtToken> repo = new ConcurrentHashMap<>();
 	
 	@Override

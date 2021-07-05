@@ -5,14 +5,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.ljy.jwt.TestTokenStore;
 import com.ljy.jwt.TestUser;
 import com.ljy.jwt.TestUserService;
+import com.ljy.jwt.security.JwtToken;
 
 public class JwtApiTest extends ApiTest {
 
@@ -24,6 +27,9 @@ public class JwtApiTest extends ApiTest {
 	
 	@Autowired
 	TestUserService userService;
+	
+	@Autowired
+	TestTokenStore tokenStore;
 	
 	@Test
 	@DisplayName("accessToken 요청시 userIdentifier가 비워져 있는 경우 실패")
@@ -117,4 +123,46 @@ public class JwtApiTest extends ApiTest {
 		.andExpect(jsonPath("$.msg").value(REFRESH_TOKEN_EMPTY_ERROR_MESSAGE));
 	}
 	
+	@Nested
+	@DisplayName("refreshToken을 정상적으로 입력했을 때")
+	class ValidRefreshToken {
+		
+		@BeforeEach
+		void setUp() {
+			tokenStore.save("identifier", new JwtToken("accessToken","refreshToken"));
+			userService.save(TestUser.create("identifier", "password"));
+		}
+		
+		@Test
+		@DisplayName("identifier는 일치하지만 refreshToken 불일치")
+		void notEqRefreshToken() throws Exception {
+			mvc.perform(post("/oauth/refresh-token")
+					.param("identifier", "identifier")
+					.param("refreshToken", "fail"))
+					.andExpect(status().isBadRequest())
+					.andExpect(jsonPath("$.msg").value(REFRESH_TOKEN_INVALID_ERROR_MESSAGE));
+		}
+		
+		@Test
+		@DisplayName("refresh token이 존재하지 않음")
+		void notEqIdentifier() throws Exception {
+			mvc.perform(post("/oauth/refresh-token")
+					.param("identifier", "fail")
+					.param("refreshToken", "refreshToken"))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.msg").value(REFRESH_TOKEN_NOT_EXIST_ERROR_MESSAGE));
+		}
+		
+		@Test
+		@Disabled
+		@DisplayName("토큰 발급")
+		void success() throws Exception {
+			mvc.perform(post("/oauth/refresh-token")
+					.param("identifier", "identifier")
+					.param("refreshToken", "refreshToken"))
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("$.accessToken").exists())
+					.andExpect(jsonPath("$.refreshToken").exists());
+		}
+	}
 }

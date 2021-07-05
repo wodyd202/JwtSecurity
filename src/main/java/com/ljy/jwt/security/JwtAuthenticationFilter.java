@@ -11,17 +11,17 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.ljy.jwt.exception.InvalidJwtTokenException;
+import com.ljy.jwt.security.JwtToken.JwtTokenType;
 
 public class JwtAuthenticationFilter implements Filter {
 	private final JwtTokenResolver jwtTokenResolver;
 	private final JwtAuthenticationToken jwtAuthenticationToken;
-	private final TokenStore tokenStore;
-	
-	@Value("${spring.jwt.secretKey}")
-	private String secretKey;
+	private final JwtTokenStore tokenStore;
+	private final String secretKey;
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -31,17 +31,22 @@ public class JwtAuthenticationFilter implements Filter {
 			chain.doFilter(request, response);
 			return;
 		}
-
-		token.validation(secretKey);
+		
+		try {
+			token.validation(secretKey, JwtTokenType.ACCESS_TOKEN);
+		}catch (InvalidJwtTokenException e) {
+			chain.doFilter(request, response);
+			return;
+		}
 
 		String userIdentifier = getUserIdentifier(token);
 		JwtToken findToken = getPersistedToken(userIdentifier).orElse(null);
 		
-		if (isEmptyToken(token) || notEqualAccessToken(token, findToken)) {
+		if (isEmptyToken(findToken) || notEqualAccessToken(token, findToken)) {
 			chain.doFilter(request, response);
 			return;
 		}
-		
+
 		setAuthentication(token);
 		chain.doFilter(request, response);
 	}
@@ -71,10 +76,11 @@ public class JwtAuthenticationFilter implements Filter {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
-	public JwtAuthenticationFilter(JwtTokenResolver jwtTokenResolver, JwtAuthenticationToken jwtAuthenticationToken, TokenStore tokenStore) {
+	public JwtAuthenticationFilter(JwtTokenResolver jwtTokenResolver, JwtAuthenticationToken jwtAuthenticationToken, JwtTokenStore tokenStore, String secretKey) {
 		this.jwtTokenResolver = jwtTokenResolver;
 		this.jwtAuthenticationToken = jwtAuthenticationToken;
 		this.tokenStore = tokenStore;
+		this.secretKey = secretKey;
 	}
 
 }

@@ -15,16 +15,16 @@ public class JwtErrorController {
 	
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public ResponseEntity<JwtErrorResponse> error(UsernameNotFoundException e) {
-		return new ResponseEntity<>(new JwtErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(JwtErrorResponse.create(e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(InvalidAccessTokenException.class)
 	public ResponseEntity<JwtErrorResponse> error(InvalidAccessTokenException e) {
-		return new ResponseEntity<>(new JwtErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(JwtErrorResponse.create(e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(InvalidRefreshTokenException.class)
 	public ResponseEntity<JwtErrorResponse> error(InvalidRefreshTokenException e) {
-		return new ResponseEntity<>(new JwtErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(JwtErrorResponse.create(e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 }

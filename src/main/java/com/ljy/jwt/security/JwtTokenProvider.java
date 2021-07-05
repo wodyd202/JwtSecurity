@@ -10,10 +10,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JwtTokenProvider {
-	private final TokenStore tokenStore;
-
-	@Value("${spring.jwt.secretKey}")
-	private String secretKey;
+	private final JwtTokenStore tokenStore;
+	private final String secretKey;
 	
 	@Value("${spring.jwt.accessTokenExpireAt}")
 	private long accessTokenExpireAt;
@@ -48,7 +46,8 @@ public class JwtTokenProvider {
 			.compact();
 	}
 	
-	public JwtTokenProvider(TokenStore tokenStore) {
+	public JwtTokenProvider(String secretKey, JwtTokenStore tokenStore) {
+		this.secretKey = secretKey;
 		this.tokenStore = tokenStore;
 	}
 }

@@ -9,6 +9,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 public class JwtToken {
+	public enum JwtTokenType { ACCESS_TOKEN, REFRESH_TOKEN }
+	
 	private String accessToken;
 	private String refreshToken;
 
@@ -43,15 +45,17 @@ public class JwtToken {
 		this.refreshToken = refreshToken;
 	}
 
-	public void validation(String secretKey) {
-		if(expireToken(secretKey)) {
+	public void validation(String secretKey, JwtTokenType type) {
+		if(expireToken(secretKey, type)) {
 			throw new InvalidJwtTokenException();
 		}
 	}
 
-	private boolean expireToken(String secretKey) {
+	private boolean expireToken(String secretKey, JwtTokenType type) {
 		try {
-			Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken);
+			Jws<Claims> claims = Jwts.parser()
+										.setSigningKey(secretKey)
+										.parseClaimsJws(type.equals(JwtTokenType.ACCESS_TOKEN) ? accessToken : refreshToken);
 			boolean remainExpiration = claims.getBody().getExpiration().before(new Date());
 			return remainExpiration;
 		}catch (Exception e) {

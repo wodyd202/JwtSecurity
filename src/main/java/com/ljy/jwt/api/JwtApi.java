@@ -20,7 +20,7 @@ import com.ljy.jwt.exception.InvalidAccessTokenException;
 import com.ljy.jwt.exception.InvalidRefreshTokenException;
 import com.ljy.jwt.security.JwtToken;
 import com.ljy.jwt.security.JwtTokenProvider;
-import com.ljy.jwt.security.TokenStore;
+import com.ljy.jwt.security.JwtTokenStore;
 
 @RestController
 @RequestMapping("oauth")
@@ -29,7 +29,7 @@ public class JwtApi {
 	@Autowired private UserDetailsService userService;
 	@Autowired private JwtTokenProvider jwtTokenProvider;
 	@Autowired private PasswordEncoder passwordEncoder;
-	@Autowired private TokenStore tokenStore;
+	@Autowired private JwtTokenStore tokenStore;
 	
 	@Value("${spring.jwt.refreshToken.empty.errorMsg}")
 	private String REFRESH_TOKEN_EMPTY_ERROR_MESSAGE;
@@ -48,7 +48,7 @@ public class JwtApi {
 
 		JwtToken jwtToken = tokenStore.findByUserIdentifier(refreshToken.getIdentifier())
 									   .orElseThrow(() -> new InvalidRefreshTokenException(REFRESH_TOKEN_NOT_EXIST_ERROR_MESSAGE));
-		
+
 		if(notEqualRefreshToken(refreshToken, jwtToken)) {
 			throw new InvalidRefreshTokenException(REFRESH_TOKEN_INVALID_ERROR_MESSAGE);
 		}
