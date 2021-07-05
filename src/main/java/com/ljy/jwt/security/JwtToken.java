@@ -16,6 +16,10 @@ public class JwtToken {
 		return accessToken;
 	}
 	
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof JwtToken) {

@@ -13,7 +13,7 @@ public class TestConfiguration extends JwtSecurityConfig {
 
 	@Override
 	public TokenStore tokenStore() {
-		return new InmemoryTokenStore();
+		return new TestTokenStore();
 	}
 
 	@Override

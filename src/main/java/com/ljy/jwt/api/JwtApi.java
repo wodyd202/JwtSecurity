@@ -78,7 +78,6 @@ public class JwtApi {
 		if (notMatchPassword(loginInfo, loginUser)) {
 			throw new InvalidAccessTokenException(ACCESS_TOKEN_INVALID_ERROR_MESSAGE);
 		} 
-		
 		return new ResponseEntity<>(createToken(loginUser), HttpStatus.OK);
 	}
 
