@@ -1,0 +1,1 @@
+mvn -DaltDeploymentRepository=release::default::file:./release clean deploy
