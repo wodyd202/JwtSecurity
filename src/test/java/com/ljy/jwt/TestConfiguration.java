@@ -17,7 +17,9 @@ public class TestConfiguration extends JwtSecurityConfig {
 	protected void customConfigure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers(HttpMethod.GET, "/authenticate").authenticated();
+			.antMatchers(HttpMethod.GET, "/authenticate").authenticated()
+			.antMatchers(HttpMethod.GET, "/permit-all").permitAll();
+			
 	}
 	
 	@Override

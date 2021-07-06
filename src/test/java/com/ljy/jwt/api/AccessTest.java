@@ -87,4 +87,41 @@ public class AccessTest extends ApiTest{
 					.header(HEADER, jwtToken.getAccessToken()))
 		.andExpect(status().isForbidden());
 	}
+	
+	@Test
+	@DisplayName("토큰 재발급 후 이전 토큰으로 엑세스하면 엑세스 거부")
+	void refreshTokenAfterBeforeAccessTokenAccess() throws Exception {
+		JwtToken jwtToken = tokenStore.findByUserIdentifier("identifier").get();
+	
+		Thread.sleep(1000);
+		provider.provideToken("identifier", new ArrayList<>());
+		
+		mvc.perform(get("/authenticate")
+				.header(HEADER, jwtToken.getAccessToken()))
+		.andExpect(status().isForbidden());
+	}
+	
+	@Test
+	@DisplayName("토큰 재발급 후 재발급한 토큰으로 요청")
+	void refreshTokenAfterAccess() throws Exception {
+		provider.provideToken("identifier", new ArrayList<>());
+		
+		JwtToken jwtToken = tokenStore.findByUserIdentifier("identifier").get();
+		
+		mvc.perform(get("/authenticate")
+				.header(HEADER, jwtToken.getAccessToken()))
+		.andExpect(status().isNotFound());
+	}
+	
+	@Test
+	@DisplayName("모든 사용자가 접근할 수 있는 페이지는 토큰 유무를 상관하지 않음")
+	void permitAll() throws Exception {
+		mvc.perform(get("/permit-all")
+				.header(HEADER, "sasa"))
+		.andExpect(status().isNotFound());
+
+		mvc.perform(get("/permit-all"))
+		.andExpect(status().isNotFound());
+	}
+	
 }

@@ -21,8 +21,8 @@ import com.ljy.jwt.security.JwtAuthenticationFilter;
 import com.ljy.jwt.security.JwtAuthenticationToken;
 import com.ljy.jwt.security.JwtTokenProvider;
 import com.ljy.jwt.security.JwtTokenResolver;
-import com.ljy.jwt.security.SimpleJwtTokenResolver;
 import com.ljy.jwt.security.JwtTokenStore;
+import com.ljy.jwt.security.SimpleJwtTokenResolver;
 
 abstract public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	
