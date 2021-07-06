@@ -4,12 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ljy.jwt.api.model.JwtErrorResponse;
 import com.ljy.jwt.exception.InvalidAccessTokenException;
 import com.ljy.jwt.exception.InvalidRefreshTokenException;
 
+@RestController
 @RestControllerAdvice
 public class JwtErrorController {
 	

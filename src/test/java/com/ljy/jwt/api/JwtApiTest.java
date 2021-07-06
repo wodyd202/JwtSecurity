@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.ljy.jwt.security.InemoryTokenStore;
+import com.ljy.jwt.security.InmemoryTokenStore;
 import com.ljy.jwt.security.JwtToken;
 
 public class JwtApiTest extends ApiTest {
@@ -26,7 +26,7 @@ public class JwtApiTest extends ApiTest {
 	TestUserService userService;
 	
 	@Autowired
-	InemoryTokenStore tokenStore;
+	InmemoryTokenStore tokenStore;
 	
 	@Test
 	@DisplayName("accessToken 요청시 userIdentifier가 비워져 있는 경우 실패")

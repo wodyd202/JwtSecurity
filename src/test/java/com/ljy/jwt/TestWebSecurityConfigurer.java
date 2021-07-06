@@ -1,18 +1,31 @@
 package com.ljy.jwt;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.stereotype.Component;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.ljy.jwt.config.WebSecurityConfigurer;
+import com.ljy.jwt.api.TestUserService;
+import com.ljy.jwt.config.JwtSecurityConfiguration;
+import com.ljy.jwt.security.InmemoryTokenStore;
+import com.ljy.jwt.security.JwtTokenStore;
 
-@Component
-public class TestWebSecurityConfigurer implements WebSecurityConfigurer {
+@EnableWebSecurity
+public class TestWebSecurityConfigurer extends JwtSecurityConfiguration {
 
 	@Override
-	public void configure(HttpSecurity http) throws Exception {
+	protected void customConfigure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers(HttpMethod.GET, "/authenticate").authenticated()
-			.antMatchers(HttpMethod.GET, "/permit-all").permitAll();
+			.antMatchers("/permit-all").permitAll()
+			.antMatchers("/authenticate").authenticated();
+	}
+	
+	@Override
+	protected UserDetailsService userDetailsService() {
+		return new TestUserService();
+	}
+
+	@Override
+	public JwtTokenStore tokenStore() {
+		return new InmemoryTokenStore();
 	}
 }
