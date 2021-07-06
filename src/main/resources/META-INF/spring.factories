@@ -1,1 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.ljy.jwt.config.JwtSecurityConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.ljy.jwt.config.JwtSecurityConfiguration
