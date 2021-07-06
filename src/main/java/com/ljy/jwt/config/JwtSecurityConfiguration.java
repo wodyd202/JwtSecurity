@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,6 +30,7 @@ import com.ljy.jwt.security.JwtTokenStore;
 import com.ljy.jwt.security.SimpleJwtTokenResolver;
 
 @EnableWebSecurity
+@Configuration
 @ComponentScan("com.ljy.jwt.api")
 public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
