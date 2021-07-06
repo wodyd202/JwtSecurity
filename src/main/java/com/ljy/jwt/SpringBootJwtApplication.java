@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringBootJwt {
+public class SpringBootJwtApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootJwt.class, args);
+		SpringApplication.run(SpringBootJwtApplication.class, args);
 	}
 }

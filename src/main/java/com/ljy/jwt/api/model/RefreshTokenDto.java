@@ -2,8 +2,6 @@ package com.ljy.jwt.api.model;
 
 import org.springframework.util.StringUtils;
 
-import com.ljy.jwt.security.JwtToken;
-
 public class RefreshTokenDto {
 	private String identifier;
 	private String refreshToken;
@@ -32,14 +30,4 @@ public class RefreshTokenDto {
 		return !StringUtils.hasText(value);
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof JwtToken) {
-			boolean eqIdentifier = ((RefreshTokenDto) obj).identifier.equals(this.identifier);
-			boolean eqRefreshToken = ((RefreshTokenDto) obj).refreshToken.equals(this.refreshToken);
-			return eqIdentifier && eqRefreshToken;
-		}
-		return false;
-	}
-
 }

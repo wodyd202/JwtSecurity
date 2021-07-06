@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.ljy.jwt.TestTokenStore;
-import com.ljy.jwt.TestUser;
-import com.ljy.jwt.TestUserService;
+import com.ljy.jwt.security.InemoryTokenStore;
 import com.ljy.jwt.security.JwtToken;
 
 public class JwtApiTest extends ApiTest {
@@ -28,7 +26,7 @@ public class JwtApiTest extends ApiTest {
 	TestUserService userService;
 	
 	@Autowired
-	TestTokenStore tokenStore;
+	InemoryTokenStore tokenStore;
 	
 	@Test
 	@DisplayName("accessToken 요청시 userIdentifier가 비워져 있는 경우 실패")
@@ -67,12 +65,22 @@ public class JwtApiTest extends ApiTest {
 		
 		@Test
 		@DisplayName("아이디 비밀번호 불일치")
-		void fail() throws Exception {
+		void fail_1() throws Exception {
 			mvc.perform(post("/oauth/token")
 					.param("identifier", "fail")
 					.param("password", "fail"))
 					.andExpect(status().isBadRequest())
 					.andExpect(jsonPath("$.msg").value(ACCESS_TOKEN_INVALID_ERROR_MESSAGE));
+		}
+		
+		@Test
+		@DisplayName("아이디는 일치하나 비밀번호 불일치")
+		void fail_2() throws Exception {
+			mvc.perform(post("/oauth/token")
+					.param("identifier", "identifier")
+					.param("password", "fail"))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.msg").value(ACCESS_TOKEN_INVALID_ERROR_MESSAGE));
 		}
 		
 		@Test

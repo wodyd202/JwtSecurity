@@ -1,4 +1,4 @@
-package com.ljy.jwt;
+package com.ljy.jwt.api;
 
 import java.util.Arrays;
 import java.util.Collection;

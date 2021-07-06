@@ -1,12 +1,11 @@
 package com.ljy.jwt.security;
 
-import java.util.Date;
-
 import com.ljy.jwt.exception.InvalidJwtTokenException;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 
 public class JwtToken {
 	public enum JwtTokenType { ACCESS_TOKEN, REFRESH_TOKEN }
@@ -46,21 +45,16 @@ public class JwtToken {
 	}
 
 	public void validation(String secretKey, JwtTokenType type) {
-		if(expireToken(secretKey, type)) {
-			throw new InvalidJwtTokenException();
-		}
-	}
-
-	private boolean expireToken(String secretKey, JwtTokenType type) {
 		try {
-			Jws<Claims> claims = Jwts.parser()
-										.setSigningKey(secretKey)
-										.parseClaimsJws(type.equals(JwtTokenType.ACCESS_TOKEN) ? accessToken : refreshToken);
-			boolean remainExpiration = claims.getBody().getExpiration().before(new Date());
-			return remainExpiration;
-		}catch (Exception e) {
+			Jwts.parser()
+				.setSigningKey(secretKey)
+				.parseClaimsJws(type.equals(JwtTokenType.ACCESS_TOKEN) ? accessToken : refreshToken);
+		}catch (MalformedJwtException e) {
+			throw new InvalidJwtTokenException();
+		}catch (ExpiredJwtException e) {
+			throw new InvalidJwtTokenException();
+		}catch (SignatureException e) {
 			throw new InvalidJwtTokenException();
 		}
 	}
-
 }

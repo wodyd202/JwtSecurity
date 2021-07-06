@@ -13,12 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.ljy.jwt.TestUser;
-import com.ljy.jwt.TestUserService;
 import com.ljy.jwt.security.JwtToken;
 import com.ljy.jwt.security.JwtTokenProvider;
 import com.ljy.jwt.security.JwtTokenStore;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -74,8 +73,11 @@ public class AccessTest extends ApiTest{
 	@Test
 	@DisplayName("토큰 만료로 인한 엑세스 거부")
 	void accessDenied() throws Exception {
+		Claims claims = Jwts.claims().setSubject("userIdentifier");
+
 		String accessToken = Jwts.builder()
 			.setIssuedAt(new Date())
+			.setClaims(claims)
 			.setExpiration(new Date(new Date().getTime() - 10_000_000))
 			.signWith(SignatureAlgorithm.HS256, secretKey)
 			.compact();

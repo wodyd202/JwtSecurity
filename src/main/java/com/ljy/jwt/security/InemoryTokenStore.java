@@ -1,12 +1,9 @@
-package com.ljy.jwt;
+package com.ljy.jwt.security;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.ljy.jwt.security.JwtToken;
-import com.ljy.jwt.security.JwtTokenStore;
-
-public class TestTokenStore implements JwtTokenStore {
+public class InemoryTokenStore implements JwtTokenStore {
 	private final ConcurrentHashMap<String, JwtToken> repo = new ConcurrentHashMap<>();
 	
 	@Override

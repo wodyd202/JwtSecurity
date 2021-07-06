@@ -24,7 +24,7 @@ import com.ljy.jwt.security.JwtTokenStore;
 
 @RestController
 @RequestMapping("oauth")
-public class JwtApi {
+public class DefaultJwtEndPoint implements JwtEndPoint {
 	
 	@Autowired private UserDetailsService userService;
 	@Autowired private JwtTokenProvider jwtTokenProvider;

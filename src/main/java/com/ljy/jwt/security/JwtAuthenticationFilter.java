@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter implements Filter {
 		}
 
 		String userIdentifier = getUserIdentifier(token);
-		JwtToken findToken = getPersistedToken(userIdentifier).orElse(null);
+		Object findToken = getPersistedToken(userIdentifier).orElse(null);
 		
 		if (isEmptyToken(findToken) || notEqualAccessToken(token, findToken)) {
 			chain.doFilter(request, response);
@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	private boolean notEqualAccessToken(JwtToken token, JwtToken findToken) {
+	private boolean notEqualAccessToken(Object token, Object findToken) {
 		return !findToken.equals(token);
 	}
 
@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter implements Filter {
 		return jwtTokenResolver.resolve((HttpServletRequest) request);
 	}
 
-	private boolean isEmptyToken(JwtToken token) {
+	private boolean isEmptyToken(Object token) {
 		return Objects.isNull(token);
 	}
 

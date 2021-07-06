@@ -1,15 +1,18 @@
 package com.ljy.jwt.config;
 
 import java.util.Base64;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +20,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.ljy.jwt.security.InemoryTokenStore;
 import com.ljy.jwt.security.JwtAuthenticationFilter;
 import com.ljy.jwt.security.JwtAuthenticationToken;
 import com.ljy.jwt.security.JwtTokenProvider;
@@ -24,7 +28,9 @@ import com.ljy.jwt.security.JwtTokenResolver;
 import com.ljy.jwt.security.JwtTokenStore;
 import com.ljy.jwt.security.SimpleJwtTokenResolver;
 
-abstract public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity
+@ComponentScan("com.ljy.jwt.api")
+public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private JwtTokenResolver jwtTokenResolver;
@@ -35,12 +41,21 @@ abstract public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${spring.jwt.secretKey}")
 	private String secretKey;
 	
+	@Autowired(required = false)
+	WebSecurityConfigurer customWebSecurityConfigurerAdapter;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
 	@PostConstruct
 	protected void encodeSecretKey() {
 		this.secretKey = Base64.getEncoder().encodeToString(this.secretKey.getBytes());
 	}
 	
-	protected void customConfigure(HttpSecurity http) throws Exception {};
+	@Override
+	protected UserDetailsService userDetailsService() {
+		return userDetailsService;
+	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -57,7 +72,12 @@ abstract public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 		.exceptionHandling()
 		.and()
 		.addFilterBefore(new JwtAuthenticationFilter(jwtTokenResolver, jwtAuthenticationToken(), tokenStore, secretKey), UsernamePasswordAuthenticationFilter.class);
-		customConfigure(http);
+		
+		if(Objects.isNull(customWebSecurityConfigurerAdapter)) {
+			return;
+		}
+		
+		customWebSecurityConfigurerAdapter.configure(http);
 	}
 
 	@Bean
@@ -67,7 +87,9 @@ abstract public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
-	public abstract UserDetailsService userDetailsService();
+	JwtTokenStore tokenStore() {
+		return new InemoryTokenStore();
+	}
 	
 	@Bean
 	JwtAuthenticationToken jwtAuthenticationToken() { 
@@ -89,6 +111,4 @@ abstract public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new SimpleJwtTokenResolver();
 	}
 	
-	@Bean
-	abstract public JwtTokenStore tokenStore();
 }
