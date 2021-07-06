@@ -58,8 +58,7 @@ public class JwtAuthenticationFilter implements Filter {
 	}
 
 	private void removePersistAccessToken(JwtToken token) {
-		String userIdentifier = getUserIdentifier(token);
-		tokenStore.remove(userIdentifier);
+		tokenStore.remove(token);
 	}
 
 	private boolean notEqualAccessToken(Object token, Object findToken) {

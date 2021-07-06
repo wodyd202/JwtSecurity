@@ -9,5 +9,5 @@ public interface JwtTokenStore {
 	
 	boolean existByUserIdentifier(String userIdentifier);
 	
-	void remove(String userIdentifier);
+	void remove(JwtToken token);
 }

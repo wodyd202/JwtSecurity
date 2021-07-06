@@ -17,6 +17,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.ljy.jwt.security.InmemoryTokenStore;
 import com.ljy.jwt.security.JwtAuthenticationFilter;
 import com.ljy.jwt.security.JwtAuthenticationToken;
 import com.ljy.jwt.security.JwtTokenProvider;
@@ -25,13 +26,10 @@ import com.ljy.jwt.security.JwtTokenStore;
 import com.ljy.jwt.security.SimpleJwtTokenResolver;
 
 @JwtSecurityEndPointScan
-abstract public class JwtSecurityConfiguration extends WebSecurityConfigurerAdapter {
+abstract public class JwtSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private JwtTokenResolver jwtTokenResolver;
-	
-	@Autowired
-	private JwtTokenStore tokenStore;
 	
 	@Value("${spring.jwt.secretKey}")
 	private String secretKey;
@@ -61,7 +59,7 @@ abstract public class JwtSecurityConfiguration extends WebSecurityConfigurerAdap
 		.and()
 		.exceptionHandling()
 		.and()
-		.addFilterBefore(new JwtAuthenticationFilter(jwtTokenResolver, jwtAuthenticationToken(), tokenStore, secretKey), UsernamePasswordAuthenticationFilter.class);
+		.addFilterBefore(new JwtAuthenticationFilter(jwtTokenResolver, jwtAuthenticationToken(), tokenStore(), secretKey), UsernamePasswordAuthenticationFilter.class);
 		customConfigure(http);
 	}
 
@@ -72,7 +70,9 @@ abstract public class JwtSecurityConfiguration extends WebSecurityConfigurerAdap
 	}
 	
 	@Bean
-	abstract public JwtTokenStore tokenStore();
+	protected JwtTokenStore tokenStore() {
+		return new InmemoryTokenStore();
+	}
 	
 	@Bean
 	JwtAuthenticationToken jwtAuthenticationToken() { 
@@ -81,7 +81,7 @@ abstract public class JwtSecurityConfiguration extends WebSecurityConfigurerAdap
 	
 	@Bean
 	JwtTokenProvider jwtTokenProvider() {
-		return new JwtTokenProvider(secretKey, tokenStore);
+		return new JwtTokenProvider(secretKey, tokenStore());
 	}
 	
 	@Bean

@@ -5,12 +5,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.ljy.jwt.api.TestUserService;
-import com.ljy.jwt.config.JwtSecurityConfiguration;
-import com.ljy.jwt.security.InmemoryTokenStore;
-import com.ljy.jwt.security.JwtTokenStore;
+import com.ljy.jwt.config.JwtSecurityConfigurerAdapter;
 
 @EnableWebSecurity
-public class TestWebSecurityConfigurer extends JwtSecurityConfiguration {
+public class TestWebSecurityConfigurer extends JwtSecurityConfigurerAdapter {
 
 	@Override
 	protected void customConfigure(HttpSecurity http) throws Exception {
@@ -23,9 +21,5 @@ public class TestWebSecurityConfigurer extends JwtSecurityConfiguration {
 	protected UserDetailsService userDetailsService() {
 		return new TestUserService();
 	}
-
-	@Override
-	public JwtTokenStore tokenStore() {
-		return new InmemoryTokenStore();
-	}
+	
 }
