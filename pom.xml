@@ -9,7 +9,7 @@
 		<version>2.1.6.RELEASE</version>
 		<relativePath />
 	</parent>
-	<groupId>com.kakao</groupId>
+	<groupId>com.ljy.jwt</groupId>
 	<artifactId>SpringBootJWT</artifactId>
 	<version>0.0.1</version>
 	<name>SpringBootJWT</name>
