@@ -21,4 +21,9 @@ public class InmemoryTokenStore implements JwtTokenStore {
 		return findByUserIdentifier(userIdentifier).isPresent();
 	}
 
+	@Override
+	public void remove(String userIdentifier) {
+		repo.remove(userIdentifier);
+	}
+
 }

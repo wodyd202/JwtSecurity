@@ -17,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.ljy.jwt.exception.InvalidJwtTokenException;
 import com.ljy.jwt.security.JwtToken.JwtTokenType;
 
+import io.jsonwebtoken.ExpiredJwtException;
+
 public class JwtAuthenticationFilter implements Filter {
 	private final JwtTokenResolver jwtTokenResolver;
 	private final JwtAuthenticationToken jwtAuthenticationToken;
@@ -34,6 +36,10 @@ public class JwtAuthenticationFilter implements Filter {
 		
 		try {
 			token.validation(secretKey, JwtTokenType.ACCESS_TOKEN);
+		}catch (ExpiredJwtException e) {
+			removePersistAccessToken(token);
+			chain.doFilter(request, response);
+			return;
 		}catch (InvalidJwtTokenException e) {
 			chain.doFilter(request, response);
 			return;
@@ -49,6 +55,11 @@ public class JwtAuthenticationFilter implements Filter {
 
 		setAuthentication(token);
 		chain.doFilter(request, response);
+	}
+
+	private void removePersistAccessToken(JwtToken token) {
+		String userIdentifier = getUserIdentifier(token);
+		tokenStore.remove(userIdentifier);
 	}
 
 	private boolean notEqualAccessToken(Object token, Object findToken) {

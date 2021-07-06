@@ -13,6 +13,7 @@ import com.ljy.jwt.security.JwtToken;
 import com.ljy.jwt.security.JwtToken.JwtTokenType;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -73,7 +74,7 @@ public class JwtTokenTest {
 				.compact();
 		
 		JwtToken token = new JwtToken(accessToken);
-		assertThrows(InvalidJwtTokenException.class, ()->{
+		assertThrows(ExpiredJwtException.class, ()->{
 			token.validation("secretKey", JwtTokenType.ACCESS_TOKEN);
 		});
 	}

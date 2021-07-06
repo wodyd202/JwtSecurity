@@ -8,4 +8,6 @@ public interface JwtTokenStore {
 	Optional<JwtToken> findByUserIdentifier(String userIdentifier);
 	
 	boolean existByUserIdentifier(String userIdentifier);
+	
+	void remove(String userIdentifier);
 }

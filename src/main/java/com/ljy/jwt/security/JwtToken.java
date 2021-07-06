@@ -52,7 +52,7 @@ public class JwtToken {
 		}catch (MalformedJwtException e) {
 			throw new InvalidJwtTokenException();
 		}catch (ExpiredJwtException e) {
-			throw new InvalidJwtTokenException();
+			throw e;
 		}catch (SignatureException e) {
 			throw new InvalidJwtTokenException();
 		}
