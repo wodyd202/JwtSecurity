@@ -23,19 +23,57 @@ mvn test
 1. add this dependency into pom.xml
 
 ```sh
-<dependencies>
-	...
-	<dependency>
-		<groupId>com.ljy.jwt</groupId>
-		<artifactId>SpringBootJWT</artifactId>
-		<version>0.0.1</version>
-	</dependency>
-</dependencies>
+<project>
+	<dependencies>
+		...
+		<dependency>
+			<groupId>com.ljy.jwt</groupId>
+			<artifactId>SpringBootJWT</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
 
-<distributionManagement>
-	<repository>
-		<id>release</id>
-		<url>https://github.com/wodyd202/JwtSecurity/tree/master/release/com/kakao/SpringBootJWT</url>
-	</repository>
-</distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>release</id>
+			<url>https://github.com/wodyd202/JwtSecurity/tree/master/release/com/kakao/SpringBootJWT</url>
+		</repository>
+	</distributionManagement>
+</project>
 ```
+
+2. create security configure class(extends com.ljy.jwt.config.JwtSecurityConfigurerAdapter class) after add @EnableWebSecurity Annotation
+
+3. add this propertie into application.properties
+
+```sh
+spring.jwt.header=
+spring.jwt.secretKey=
+spring.jwt.accessTokenExpireAt=
+spring.jwt.refreshTokenExpireAt=
+
+spring.jwt.refreshToken.empty.errorMsg=
+spring.jwt.refreshToken.notExist.errorMsg=
+spring.jwt.refreshToken.invalid.errorMsg=
+
+spring.jwt.accessToken.empty.errorMsg=
+spring.jwt.accessToken.invalid.errorMsg=
+```
+
+## endpoint
+
+* accessToken
+- application/x-www-form-urlencoded
+[POST]/oauth/token
+
+- param
+String identifier(require)
+String password(require)
+
+* refreshToken
+- application/x-www-form-urlencoded
+[POST]/oauth/refresh-token
+
+- param
+String identifier(require)
+String refreshToken(require)
