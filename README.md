@@ -67,8 +67,8 @@ application/x-www-form-urlencoded
 [POST]/oauth/token
 
 - param
-String identifier(require)
-String password(require)
+String identifier (require)
+String password (require)
 ```
 
 ![Build Status](https://img.shields.io/static/v1?label=&message=refreshToken&color=black)
@@ -77,6 +77,6 @@ application/x-www-form-urlencoded
 [POST]/oauth/refresh-token
 
 - param
-String identifier(require)
-String refreshToken(require)
+String identifier (require)
+String refreshToken (require)
 ```
