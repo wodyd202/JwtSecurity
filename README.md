@@ -3,6 +3,7 @@
 ## Tech
 - access token
 - refresh token
+- default token store is inmemory token store
 
 ###
 ###
@@ -15,3 +16,4 @@ For production test...
 https://github.com/wodyd202/JwtSecurity.git
 mvn test
 ```
+
