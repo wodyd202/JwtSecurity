@@ -6,9 +6,6 @@
 - default token store is inmemory token store
 
 ###
-###
-###
-###
 ## Installation
 ###
 
@@ -20,8 +17,23 @@ mvn test
 ```
 
 ###
-###
-###
-###
 ## How to use
 ###
+
+1. add this dependency into pom.xml
+
+<dependencies>
+	...
+	<dependency>
+		<groupId>com.ljy.jwt</groupId>
+		<artifactId>SpringBootJWT</artifactId>
+		<version>0.0.1</version>
+	</dependency>
+</dependencies>
+
+<distributionManagement>
+	<repository>
+		<id>release</id>
+		<url>https://github.com/wodyd202/JwtSecurity/tree/master/release/com/kakao/SpringBootJWT</url>
+	</repository>
+</distributionManagement>
