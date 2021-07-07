@@ -61,7 +61,7 @@ spring.jwt.accessToken.invalid.errorMsg=
 ```
 
 ## Endpoint
-![Build Status](https://img.shields.io/static/v1?label=&message=accessToken%20Boot&color=green)
+![Build Status](https://img.shields.io/static/v1?label=&message=accessToken%20Boot&color=black)
 ```
 application/x-www-form-urlencoded
 [POST]/oauth/token
@@ -71,11 +71,12 @@ String identifier(require)
 String password(require)
 ```
 
-![Build Status](https://img.shields.io/static/v1?label=&message=refreshToken%20Boot&color=green)
-application/x-www-form-urlencoded
-### 
+![Build Status](https://img.shields.io/static/v1?label=&message=refreshToken%20Boot&color=black)
+```
+application/x-www-form-urlencoded 
 [POST]/oauth/refresh-token
 
 - param
 String identifier(require)
 String refreshToken(require)
+```
