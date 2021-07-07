@@ -60,7 +60,7 @@ spring.jwt.accessToken.empty.errorMsg=
 spring.jwt.accessToken.invalid.errorMsg=
 ```
 
-## endpoint
+## Endpoint
 
 * accessToken
 - application/x-www-form-urlencoded
