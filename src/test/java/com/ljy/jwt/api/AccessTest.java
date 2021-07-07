@@ -10,7 +10,6 @@ import java.util.Base64;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,6 @@ public class AccessTest extends ApiTest{
 	}
 	
 	@Test
-	@Disabled
 	@DisplayName("accessToken이 없을 때 실패")
 	void noAccessToken() throws Exception {
 		mvc.perform(get("/authenticate"))
@@ -59,7 +57,6 @@ public class AccessTest extends ApiTest{
 	}
 
 	@Test
-	@Disabled
 	@DisplayName("accessToken이 유효하지 않을 때")
 	void invalidAccessToken() throws Exception {
 		mvc.perform(get("/authenticate")
@@ -68,7 +65,6 @@ public class AccessTest extends ApiTest{
 	}
 	
 	@Test
-	@Disabled
 	@DisplayName("정상 요청")
 	void success() throws Exception {
 		JwtToken jwtToken = tokenStore.findByUserIdentifier("identifier").get();
@@ -79,7 +75,6 @@ public class AccessTest extends ApiTest{
 	}
 	
 	@Test
-	@Disabled
 	@DisplayName("토큰 만료로 인한 엑세스 거부")
 	void accessDenied() throws Exception {
 		Claims claims = Jwts.claims().setSubject("userIdentifier");
@@ -122,7 +117,6 @@ public class AccessTest extends ApiTest{
 	}
 	
 	@Test
-	@Disabled
 	@DisplayName("토큰 재발급 후 이전 토큰으로 엑세스하면 엑세스 거부")
 	void refreshTokenAfterBeforeAccessTokenAccess() throws Exception {
 		JwtToken jwtToken = tokenStore.findByUserIdentifier("identifier").get();
@@ -136,7 +130,6 @@ public class AccessTest extends ApiTest{
 	}
 	
 	@Test
-	@Disabled
 	@DisplayName("토큰 재발급 후 재발급한 토큰으로 요청")
 	void refreshTokenAfterAccess() throws Exception {
 		provider.provideToken("identifier", new ArrayList<>());
@@ -149,7 +142,6 @@ public class AccessTest extends ApiTest{
 	}
 	
 	@Test
-	@Disabled
 	@DisplayName("모든 사용자가 접근할 수 있는 페이지는 토큰 유무를 상관하지 않음")
 	void permitAll() throws Exception {
 		mvc.perform(get("/permit-all")
