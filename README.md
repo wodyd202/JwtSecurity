@@ -22,6 +22,7 @@ mvn test
 
 1. add this dependency into pom.xml
 
+```sh
 <dependencies>
 	...
 	<dependency>
@@ -37,3 +38,4 @@ mvn test
 		<url>https://github.com/wodyd202/JwtSecurity/tree/master/release/com/kakao/SpringBootJWT</url>
 	</repository>
 </distributionManagement>
+```
